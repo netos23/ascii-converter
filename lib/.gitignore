@@ -1,3 +1,6 @@
+assets
+assets/*
+
 HELP.md
 target/
 !.mvn/wrapper/maven-wrapper.jar
