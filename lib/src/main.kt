@@ -1,6 +1,6 @@
+import ru.fbtw.ascii_converter.get
 import java.awt.image.BufferedImage
 import java.io.File
-import java.util.function.Predicate
 import javax.imageio.ImageIO
 import kotlin.math.min
 import kotlin.math.pow
@@ -15,7 +15,7 @@ fun main() {
     val grayscaleMatrix = toGrayScale(colorMatrix)
 
     val asciiImg = toAsciiImage(
-        gsMatrix = grayscaleMatrix,
+        grayscaleMatrix,
         w = 80, h = 35,
         listOf(' ', '.', ',', ':', ';', '_', '-', '+', '*', 'a', '&', '#', '$', '@'),
     )
@@ -80,17 +80,6 @@ fun toAsciiImage(gsMatrix: Array<Array<Double>>, w: Int, h: Int, chars: List<Cha
             chars[index]
         }
     }
-}
-
-
-operator fun BufferedImage.get(r: Int): ImageRow = ImageRow(this, r)
-
-data class ImageRow(val img: BufferedImage, val r: Int) {
-    val toArray: Array<Int>
-        get() = Array(img.width) { c -> img[r][c] }
-
-    operator fun get(c: Int) = img.getRGB(c, r)
-    operator fun set(c: Int, rgb: Int) = img.setRGB(c, r, rgb)
 }
 
 
