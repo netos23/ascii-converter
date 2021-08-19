@@ -1,4 +1,5 @@
 import ru.fbtw.ascii_converter.get
+import ru.fbtw.ascii_converter.printAsciiImg
 import java.awt.image.BufferedImage
 import java.io.File
 import javax.imageio.ImageIO
@@ -7,7 +8,7 @@ import kotlin.math.pow
 import kotlin.math.roundToInt
 
 fun main() {
-    val path = """C:\Users\nikmo\IdeaProjects\prodaction\ascii-converter\lib\assets\tom.jpg"""
+    val path = """assets/tom.jpg"""
     val src = File(path)
     val img: BufferedImage = ImageIO.read(src)
 
@@ -21,14 +22,6 @@ fun main() {
     )
 
     printAsciiImg(asciiImg)
-}
-
-private fun printAsciiImg(asciiImg: Array<Array<Char>>) {
-    asciiImg.forEach { chars ->
-        val str = StringBuilder()
-        chars.forEach { str.append(it) }
-        println(str)
-    }
 }
 
 fun toGrayScale(colorMatrix: Array<Array<Int>>): Array<Array<Double>> =

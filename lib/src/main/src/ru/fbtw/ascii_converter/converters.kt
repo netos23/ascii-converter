@@ -3,6 +3,7 @@ package ru.fbtw.ascii_converter
 import java.awt.image.BufferedImage
 import java.util.*
 import kotlin.math.min
+import kotlin.math.pow
 
 
 interface AsciiImgConverter {
@@ -14,14 +15,14 @@ abstract class AbstractAsciiImgConverter(
     protected val colorFilterChain: List<ColorFilter>? = null,
     protected val rgbFilterChain: List<RgbFilter>? = null,
     protected val grayscaleFilterFilterChain: List<GrayscaleFilter>? = null,
-    protected val matcher: CharMatcher<Comparable<Any>>
+    protected val matcher: CharMatcher
 ) : AsciiImgConverter {
 
     protected abstract fun doImgFilter(img: BufferedImage): BufferedImage
 
     protected fun doImgFilterInternal(img: BufferedImage): BufferedImage {
         val filteredImage = doImgFilter(img)
-        return imgFilterChain?.fold(filteredImage, { accImage, filter -> filter(accImage) }) ?: filteredImage
+        return imgFilterChain?.fold(filteredImage) { accImage, filter -> filter(accImage) } ?: filteredImage
     }
 
     protected abstract fun extractColorMatrix(img: BufferedImage): Array<Array<Int>>
@@ -30,7 +31,7 @@ abstract class AbstractAsciiImgConverter(
 
     protected fun doColorFilterInternal(color: Int): Int {
         val tmpColor = doColorFilter(color)
-        return colorFilterChain?.fold(tmpColor, { accCol, filter -> filter(accCol) }) ?: tmpColor
+        return colorFilterChain?.fold(tmpColor) { accCol, filter -> filter(accCol) } ?: tmpColor
     }
 
     protected abstract fun extractRgb(color: Array<Array<Int>>): Array<Array<Color>>
@@ -39,7 +40,7 @@ abstract class AbstractAsciiImgConverter(
 
     protected fun doRgbFilterInternal(color: Color): Color {
         val tmpRgb = doRgbFilter(color)
-        return rgbFilterChain?.fold(tmpRgb, { accCol, filter -> filter(accCol) }) ?: tmpRgb
+        return rgbFilterChain?.fold(tmpRgb) { accCol, filter -> filter(accCol) } ?: tmpRgb
     }
 
     protected abstract fun convertToGrayScale(color: Array<Array<Color>>): Array<Array<Double>>
@@ -48,7 +49,7 @@ abstract class AbstractAsciiImgConverter(
 
     protected fun doGrayscaleFilterInternal(gs: Double): Double {
         val tmpGs = doGrayscaleFilter(gs)
-        return grayscaleFilterFilterChain?.fold(tmpGs, { accGs, filter -> filter(accGs) }) ?: tmpGs
+        return grayscaleFilterFilterChain?.fold(tmpGs) { accGs, filter -> filter(accGs) } ?: tmpGs
     }
 
     protected fun applyMatcher(matrix: SubMatrix<Double>): Char = matcher.match(matrix)
@@ -82,16 +83,16 @@ abstract class AbstractAsciiImgConverter(
         val segmentHeight = grayscaleMatrix.size / config.h
         val segmentWidth = grayscaleMatrix[0].size / config.w
 
-        return Array(config.h) { x ->
-            Array(config.w) { y ->
+        return Array(config.h) { y ->
+            Array(config.w) { x ->
                 val remainingHeight = grayscaleMatrix.size - y * segmentHeight
                 val remainingWidth = grayscaleMatrix[0].size - x * segmentWidth
 
                 applyMatcher(
                     SubMatrix(
                         grayscaleMatrix,
-                        x,
-                        y,
+                        x * segmentWidth,
+                        y * segmentHeight,
                         min(segmentWidth, remainingWidth),
                         min(segmentHeight, remainingHeight)
                     )
@@ -106,76 +107,88 @@ class FastAsciiImgConverter(
     colorFilterChain: List<ColorFilter>? = null,
     rgbFilterChain: List<RgbFilter>? = null,
     grayscaleFilterFilterChain: List<GrayscaleFilter>? = null,
-    matcher: CharMatcher<Comparable<Any>>
+    matcher: CharMatcher
 ) : AbstractAsciiImgConverter(imgFilterChain, colorFilterChain, rgbFilterChain, grayscaleFilterFilterChain, matcher) {
 
-    override fun doImgFilter(img: BufferedImage): BufferedImage {
-        TODO("Not yet implemented")
+    override fun doImgFilter(img: BufferedImage): BufferedImage = img
+
+    override fun extractColorMatrix(img: BufferedImage): Array<Array<Int>> = Array(img.height) { row ->
+        Array(img.width) { col: Int ->
+            img[row][col]
+        }
     }
 
-    override fun extractColorMatrix(img: BufferedImage): Array<Array<Int>> {
-        TODO("Not yet implemented")
+    override fun doColorFilter(color: Int): Int = color
+
+    override fun extractRgb(color: Array<Array<Int>>): Array<Array<Color>> = Array(color.size) { row ->
+        Array(color[0].size) { col: Int ->
+            Color(color[row][col])
+        }
     }
 
-    override fun doColorFilter(color: Int): Int {
-        TODO("Not yet implemented")
+    override fun doRgbFilter(color: Color): Color = color
+
+    override fun convertToGrayScale(color: Array<Array<Color>>): Array<Array<Double>> = Array(color.size) { row ->
+        Array(color[0].size) { col: Int ->
+            val r = (color[row][col].r / 255.0).pow(2.2)
+            val g = (color[row][col].g / 255.0).pow(2.2)
+            val b = (color[row][col].b / 255.0).pow(2.2)
+
+            val lum = (0.2126 * r + 0.7152 * g + 0.0722 * b)
+
+            lum
+        }
     }
 
-    override fun extractRgb(color: Array<Array<Int>>): Array<Array<Color>> {
-        TODO("Not yet implemented")
-    }
-
-    override fun doRgbFilter(color: Color): Color {
-        TODO("Not yet implemented")
-    }
-
-    override fun convertToGrayScale(color: Array<Array<Color>>): Array<Array<Double>> {
-        TODO("Not yet implemented")
-    }
-
-    override fun doGrayscaleFilter(gs: Double): Double {
-        TODO("Not yet implemented")
-    }
+    override fun doGrayscaleFilter(gs: Double): Double = gs
 
 }
 
-data class AsciiImgConverterConfiguration(val w: Int, val h: Int, val allowedChars: SortedSet<Char>)
+data class AsciiImgConverterConfiguration(val w: Int, val h: Int, val allowedChars: SortedSet<Char>? = null)
 
-interface CharMatcher<P : Comparable<P>> {
-    val charset: List<MatchData<P>>
-    val isReady: Boolean
-    fun prepare(allowedChars: SortedSet<Char>)
+interface CharMatcher {
+    fun prepare(allowedChars: Set<Char>?)
     fun match(segment: SubMatrix<Double>): Char
 }
 
+abstract class AbstractCharMatcher<P : Comparable<P>> : CharMatcher {
+    abstract val charset: List<MatchData<P>>
+    abstract val isReady: Boolean
+}
+
 class AverageCharMatcher(override val charset: List<MatchData<Double>>) :
-    CharMatcher<Double> {
+    AbstractCharMatcher<Double>() {
 
     private lateinit var workingChars: TreeMap<Int, Char>
 
     override val isReady: Boolean
         get() = this::workingChars.isInitialized
 
-    override fun prepare(allowedChars: SortedSet<Char>) {
+    override fun prepare(allowedChars: Set<Char>?) {
         if (isReady) {
             workingChars.clear()
         } else {
             workingChars = TreeMap()
         }
 
-        workingChars.putAll(charset.filter { allowedChars.contains(it.char) }
-            .associate { matchData -> (matchData.predicate * 100).toInt() to matchData.char })
+        workingChars.putAll(charset.filter { allowedChars?.contains(it.char) ?: true }
+            .associate { matchData -> matchData.predicate.toPercent() to matchData.char })
     }
 
     override fun match(segment: SubMatrix<Double>): Char {
-        
+        var sumLum = 0.0
         for (row in segment) {
             for (lum in row) {
-
+                sumLum += lum
             }
         }
 
-        TODO()
+        val avgLum = sumLum / segment.area
+
+        val lumPercent = avgLum.toPercent()
+
+
+        return workingChars.floorEntry(lumPercent).value
     }
 }
 
@@ -201,19 +214,25 @@ data class Color(val r: Int, val g: Int, val b: Int) {
 
 data class SubMatrix<T>(val matrix: Array<Array<T>>, val x: Int, val y: Int, val w: Int, val h: Int) :
     Iterable<Iterable<T>> {
+
+    val area: Int = w * h
+
     init {
         require(matrix.isNotEmpty() and matrix.all(Array<T>::isNotEmpty)) {
             "Empty matrix. All bounds must be greater than 0"
         }
 
         val width = matrix[0].size
-        require(matrix.fold(true, { acc, p -> (p.size == width) and acc })) {
+        require(matrix.fold(true) { acc, p -> (p.size == width) and acc }) {
             "Only rectangle matrix allowed"
         }
 
-        require((x in matrix.indices) and (x + w in matrix.indices)) {
+        require(
+            (y in matrix.indices) and (y + h in matrix.indices)
+                    and (x in matrix[0].indices) and (x + w in matrix[0].indices)
+        ) {
             "One or more arg mismatch bounds. " +
-                    "Bounds: ${matrix.size} x ${matrix[0].size}, x: $x, y: $y, w: $w, h: $h"
+                    "Bounds: ${matrix.size} * ${matrix[0].size}, x: $x, y: $y, w: $w, h: $h"
         }
     }
 
@@ -268,4 +287,13 @@ data class ImageRow(val img: BufferedImage, val r: Int) {
     operator fun set(c: Int, rgb: Int) = img.setRGB(c, r, rgb)
 }
 
+fun Double.toPercent() = (this * 100).toInt()
 
+fun printAsciiImg(asciiImg: Array<Array<Char>>) {
+    asciiImg.forEach { chars ->
+        val str = StringBuilder()
+//        chars.forEach { str.append("${it.code} ") }
+        chars.forEach { str.append(it) }
+        println(str)
+    }
+}
