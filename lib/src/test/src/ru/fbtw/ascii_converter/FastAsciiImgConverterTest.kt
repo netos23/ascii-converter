@@ -1,7 +1,12 @@
 package ru.fbtw.ascii_converter
 
+import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
-import ru.fbtw.ascii_converter.*
+
+import ru.fbtw.ascii_converter.core.AsciiImgConverterConfiguration
+import ru.fbtw.ascii_converter.core.MatchData
+import ru.fbtw.ascii_converter.io.printAsciiImg
+
 import java.io.File
 import javax.imageio.ImageIO
 
@@ -35,6 +40,7 @@ internal class FastAsciiImgConverterTest {
         val converter = FastAsciiImgConverter(matcher = AverageCharMatcher(matchData))
 
         val charImg = converter.convert(ImageIO.read(testFile), AsciiImgConverterConfiguration(80, 35))
+        Assertions.assertNotNull(charImg)
         printAsciiImg(charImg)
     }
 

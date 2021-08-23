@@ -1,5 +1,5 @@
-import ru.fbtw.ascii_converter.get
-import ru.fbtw.ascii_converter.printAsciiImg
+import ru.fbtw.ascii_converter.io.printAsciiImg
+import ru.fbtw.ascii_converter.utill.get
 import java.awt.image.BufferedImage
 import java.io.File
 import javax.imageio.ImageIO
@@ -7,6 +7,7 @@ import kotlin.math.min
 import kotlin.math.pow
 import kotlin.math.roundToInt
 
+@Deprecated(message = "There is just a prototype, Use AsciiImgConverters instead")
 fun main() {
     val path = """assets/tom.jpg"""
     val src = File(path)
@@ -24,6 +25,7 @@ fun main() {
     printAsciiImg(asciiImg)
 }
 
+@Deprecated(message = "There is just a prototype, Use AsciiImgConverters instead")
 fun toGrayScale(colorMatrix: Array<Array<Int>>): Array<Array<Double>> =
     Array(colorMatrix.size) { row ->
         Array(colorMatrix[row].size) { col: Int ->
@@ -38,16 +40,13 @@ fun toGrayScale(colorMatrix: Array<Array<Int>>): Array<Array<Double>> =
             val gg = (g / 255.0).pow(2.2)
             val bb = (b / 255.0).pow(2.2)
 
-            /* val rr = (r / 255.0)
-             val gg = (g / 255.0)
-             val bb = (b / 255.0)
- */
             // Calculate luminance:
             val lum = (0.2126 * rr + 0.7152 * gg + 0.0722 * bb)
             lum
         }
     }
 
+@Deprecated(message = "There is just a prototype, Use AsciiImgConverters instead")
 fun toAsciiImage(gsMatrix: Array<Array<Double>>, w: Int, h: Int, chars: List<Char>): Array<Array<Char>> {
     val segH = gsMatrix.size / h
     val segW = gsMatrix[0].size / w
