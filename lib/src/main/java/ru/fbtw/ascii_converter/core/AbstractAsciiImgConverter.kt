@@ -1,6 +1,11 @@
 package ru.fbtw.ascii_converter.core
 
-import ru.fbtw.ascii_converter.utill.*
+import ru.fbtw.ascii_converter.utill.Color
+import ru.fbtw.ascii_converter.utill.ColorFilter
+import ru.fbtw.ascii_converter.utill.GrayscaleFilter
+import ru.fbtw.ascii_converter.utill.ImageFilter
+import ru.fbtw.ascii_converter.utill.RgbFilter
+import ru.fbtw.ascii_converter.utill.SubMatrix
 import java.awt.image.BufferedImage
 import kotlin.math.min
 

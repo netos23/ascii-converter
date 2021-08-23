@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test
 
 import ru.fbtw.ascii_converter.core.AsciiImgConverterConfiguration
 import ru.fbtw.ascii_converter.core.MatchData
-import ru.fbtw.ascii_converter.io.printAsciiImg
+import printAsciiImg
 
 import java.io.File
 import javax.imageio.ImageIO
