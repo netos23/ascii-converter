@@ -12,7 +12,7 @@ import javax.imageio.ImageIO
 
 internal class FastAsciiImgConverterTest {
 
-    val testFile = File("""assets/tom.jpg""")
+    private val testFile = File("""assets/tom.jpg""")
 
     // ' ', '.', ',', ':', ';', '_', '-', '+', '*', 'a', '&', '#', '$', '@'
 
