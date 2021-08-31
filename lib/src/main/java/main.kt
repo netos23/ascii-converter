@@ -18,7 +18,7 @@ fun main() {
     val asciiImg = toAsciiImage(
         grayscaleMatrix,
         w = 80, h = 35,
-        listOf(' ', '.', ',', ':', ';', '_', '-', '+', '*', 'a', '&', '#', '$', '@'),
+        listOf(' ', '.', ',', ':', ';', '_', '-', '+', '*', 'a', '&', '#', '$', '@').reversed(),
     )
 
     printAsciiImg(asciiImg)
