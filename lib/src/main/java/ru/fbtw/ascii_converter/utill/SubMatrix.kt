@@ -16,13 +16,20 @@ data class SubMatrix<T>(val matrix: Array<Array<T>>, val x: Int, val y: Int, val
         }
 
         require(
-            (y in matrix.indices) and (y + h in matrix.indices)
-                    and (x in matrix[0].indices) and (x + w in matrix[0].indices)
+            (y in matrix.indices) and (y + h - 1 in matrix.indices)
+                    and (x in matrix[0].indices) and (x + w - 1 in matrix[0].indices)
         ) {
             "One or more arg mismatch bounds. " +
                     "Bounds: ${matrix.size} * ${matrix[0].size}, x: $x, y: $y, w: $w, h: $h"
         }
     }
+
+    constructor(matrix: Array<Array<T>>) : this(
+        matrix,
+        x = 0, y = 0,
+        w = if (matrix.isNotEmpty()) matrix[0].size else 0,
+        h = matrix.size
+    )
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

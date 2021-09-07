@@ -20,11 +20,7 @@ class FastAsciiImgConverter(
 
     override fun doImgFilter(img: BufferedImage): BufferedImage = img
 
-    override fun extractColorMatrix(img: BufferedImage): Array<Array<Int>> = Array(img.height) { row ->
-        Array(img.width) { col: Int ->
-            img[row][col]
-        }
-    }
+    override fun extractColorMatrix(img: BufferedImage): Array<Array<Int>> = img.toMatrix()
 
     override fun doColorFilter(color: Int): Int = color
 

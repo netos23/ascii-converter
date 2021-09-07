@@ -17,4 +17,6 @@ data class ImageRow(val img: BufferedImage, val r: Int) {
     operator fun set(c: Int, rgb: Int) = img.setRGB(c, r, rgb)
 }
 
+fun BufferedImage.toMatrix(): Array<Array<Int>> = Array(this.height) { row -> this[row].toArray }
+
 fun Double.toPercent() = (this * 100).toInt()
