@@ -17,7 +17,6 @@ class App() : RComponent<RProps, RState>() {
             css {
                 +CommonStyles.contentContainer
             }
-
             styledDiv {
                 css {
                     +CommonStyles.backgroundContainer
