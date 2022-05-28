@@ -19,7 +19,7 @@ import ru.fbtw.ascii_converter.core.extractByFrequency as extractors
 internal class FastAsciiImgConverterTest {
 
     private val testFile = File("""assets/racon.jpeg""")
-    private val gifFile = "assets/ex_gif.gif"
+    private val gifFile = "assets/racon_an.gif"
 
     // ' ', '.', ',', ':', ';', '_', '-', '+', '*', 'a', '&', '#', '$', '@'
 
@@ -106,14 +106,14 @@ internal class FastAsciiImgConverterTest {
         val charImg = converter.convert(
             /*decoder.getFrame(4) ?:*/
             Array(decoder.frameCount) { decoder.getFrame(it)!! }.toList(),
-            AsciiImgConverterConfiguration(300, 200),
+            AsciiImgConverterConfiguration(100, 60),
         )
         Assertions.assertNotNull(charImg)
         writeGifAsciiImage(
             background = ru.fbtw.ascii_converter.utill.Color(Color.WHITE.rgb),
             asciiImg = charImg,
-            outputStream = FileOutputStream("assets/test.gif"),
-            font = Font("Courier", Font.PLAIN, 10)
+            outputStream = FileOutputStream("assets/test1.gif"),
+            font = Font("Courier", Font.PLAIN, 12)
         )
 /*        writeAsciiImgAsHTML(
 //            background = Color(java.awt.Color.WHITE.rgb),

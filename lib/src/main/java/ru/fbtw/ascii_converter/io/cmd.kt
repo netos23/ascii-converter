@@ -27,13 +27,13 @@ fun writeAsciiImgAsImage(
     val expectedWidth = outline.bounds.getWidth()
     val expectedHeight = outline.bounds.getHeight()
 
-    val image = BufferedImage(
-        (expectedWidth * asciiImg[0].size).toInt(),
-        (expectedHeight * asciiImg.size).toInt(),
-        BufferedImage.TYPE_INT_RGB,
-    )
+    val width = (expectedWidth * asciiImg[0].size).toInt()
+    val height = (expectedHeight * asciiImg.size).toInt()
+    val image = BufferedImage(width, height, BufferedImage.TYPE_INT_RGB)
 
     val graphics = image.graphics
+    graphics.color = java.awt.Color(background.r, background.g, background.b)
+    graphics.fillRect(0,0,width, height)
     graphics.font = font
     for ((r, row) in asciiImg.withIndex()) {
         for ((c, ch) in row.withIndex()) {
