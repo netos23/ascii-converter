@@ -1,0 +1,78 @@
+/Library/Java/JavaVirtualMachines/liberica-jdk-8.jdk/Contents/Home/bin/java -ea -Didea.test.cyclic.buffer.size=1048576 -javaagent:/Applications/IntelliJ IDEA.app/Contents/lib/idea_rt.jar=53925:/Applications/IntelliJ IDEA.app/Contents/bin -Dfile.encoding=UTF-8 -classpath /Applications/IntelliJ IDEA.app/Contents/lib/idea_rt.jar:/Users/nikitamorozov/.m2/repository/org/junit/platform/junit-platform-launcher/1.7.0/junit-platform-launcher-1.7.0.jar:/Applications/IntelliJ IDEA.app/Contents/plugins/junit/lib/junit5-rt.jar:/Applications/IntelliJ IDEA.app/Contents/plugins/junit/lib/junit-rt.jar:/Library/Java/JavaVirtualMachines/liberica-jdk-8.jdk/Contents/Home/jre/lib/charsets.jar:/Library/Java/JavaVirtualMachines/liberica-jdk-8.jdk/Contents/Home/jre/lib/ext/cldrdata.jar:/Library/Java/JavaVirtualMachines/liberica-jdk-8.jdk/Contents/Home/jre/lib/ext/dnsns.jar:/Library/Java/JavaVirtualMachines/liberica-jdk-8.jdk/Contents/Home/jre/lib/ext/jaccess.jar:/Library/Java/JavaVirtualMachines/liberica-jdk-8.jdk/Contents/Home/jre/lib/ext/localedata.jar:/Library/Java/JavaVirtualMachines/liberica-jdk-8.jdk/Contents/Home/jre/lib/ext/nashorn.jar:/Library/Java/JavaVirtualMachines/liberica-jdk-8.jdk/Contents/Home/jre/lib/ext/sunec.jar:/Library/Java/JavaVirtualMachines/liberica-jdk-8.jdk/Contents/Home/jre/lib/ext/sunjce_provider.jar:/Library/Java/JavaVirtualMachines/liberica-jdk-8.jdk/Contents/Home/jre/lib/ext/sunpkcs11.jar:/Library/Java/JavaVirtualMachines/liberica-jdk-8.jdk/Contents/Home/jre/lib/ext/zipfs.jar:/Library/Java/JavaVirtualMachines/liberica-jdk-8.jdk/Contents/Home/jre/lib/jce.jar:/Library/Java/JavaVirtualMachines/liberica-jdk-8.jdk/Contents/Home/jre/lib/jfr.jar:/Library/Java/JavaVirtualMachines/liberica-jdk-8.jdk/Contents/Home/jre/lib/jsse.jar:/Library/Java/JavaVirtualMachines/liberica-jdk-8.jdk/Contents/Home/jre/lib/management-agent.jar:/Library/Java/JavaVirtualMachines/liberica-jdk-8.jdk/Contents/Home/jre/lib/resources.jar:/Library/Java/JavaVirtualMachines/liberica-jdk-8.jdk/Contents/Home/jre/lib/rt.jar:/Library/Java/JavaVirtualMachines/liberica-jdk-8.jdk/Contents/Home/lib/dt.jar:/Library/Java/JavaVirtualMachines/liberica-jdk-8.jdk/Contents/Home/lib/jconsole.jar:/Library/Java/JavaVirtualMachines/liberica-jdk-8.jdk/Contents/Home/lib/sa-jdi.jar:/Library/Java/JavaVirtualMachines/liberica-jdk-8.jdk/Contents/Home/lib/tools.jar:/Users/nikitamorozov/IdeaProjects/prodaction/ascii-converter/lib/out/test/lib:/Users/nikitamorozov/IdeaProjects/prodaction/ascii-converter/lib/out/production/lib:/Applications/IntelliJ IDEA.app/Contents/plugins/Kotlin/kotlinc/lib/kotlin-stdlib.jar:/Applications/IntelliJ IDEA.app/Contents/plugins/Kotlin/kotlinc/lib/kotlin-reflect.jar:/Applications/IntelliJ IDEA.app/Contents/plugins/Kotlin/kotlinc/lib/kotlin-test.jar:/Users/nikitamorozov/.m2/repository/org/junit/jupiter/junit-jupiter/5.7.0/junit-jupiter-5.7.0.jar:/Users/nikitamorozov/.m2/repository/org/junit/jupiter/junit-jupiter-api/5.7.0/junit-jupiter-api-5.7.0.jar:/Users/nikitamorozov/.m2/repository/org/apiguardian/apiguardian-api/1.1.0/apiguardian-api-1.1.0.jar:/Users/nikitamorozov/.m2/repository/org/opentest4j/opentest4j/1.2.0/opentest4j-1.2.0.jar:/Users/nikitamorozov/.m2/repository/org/junit/platform/junit-platform-commons/1.7.0/junit-platform-commons-1.7.0.jar:/Users/nikitamorozov/.m2/repository/org/junit/jupiter/junit-jupiter-params/5.7.0/junit-jupiter-params-5.7.0.jar:/Users/nikitamorozov/.m2/repository/org/junit/jupiter/junit-jupiter-engine/5.7.0/junit-jupiter-engine-5.7.0.jar:/Users/nikitamorozov/.m2/repository/org/junit/platform/junit-platform-engine/1.7.0/junit-platform-engine-1.7.0.jar com.intellij.rt.junit.JUnitStarter -ideVersion5 -junit5 ru.fbtw.ascii_converter.FastAsciiImgConverterTest,convert
+a-_-*aaa-_--------+++++++++++++++++++++++++++++++-,   +&&&a--+++++++++++++++++++
+*aaaaaa-,---------------------------------------:   .a&&&&&a--------------------
+-+**aa*._--------------------------------------.   *&&&&&&&&&+_-----------------
+---___,:-------------------------------------:   ,a&&&&&&&&&&&*_----------------
+_-----.-------------------------------------.   -&&&&&&&&&&&&&&*_---------------
+,,:---;-------------------;;-----;--------:   .a&&*+*aa&&&&&&&&&*;--------------
++-;.;-----------------------;----:;-----_.   -a&&_:...,-a&&&&&&&&-.;--------;;_*
+*+++_,_---------------------------_---;.   ,a&&&&:.     .*&&&&&&&_.,_---;:;*a#$$
+*++++-.-----------------------_:----:.  .,;,a#&&&*,      ,a&&&&&-..,--;_a#$@@@@$
+*+++++:---------------------------;_;;::;--_;&&&&&*,.   .,a&&&&+..:;,-&$$@@$@$$#
+*+++++:_-------------------------; ,,,,,;---__a&&&&a*_:,_*&&&a-.:;..a$$$$@@$$&aa
+*+++++:_------------------------;.  :,_._:_--_;a&&&&&&&&&&&&a,,,..a$$@$@@$$a*&@@
+*++++;:-----------------------.    ,---_-;----_:a&&&&&&&&&a-,,:._#$@@@@@$#*&@@@@
+*-_;:_----------------------:     .-----_.:-----;_a&&&&a*;,:.;:-$$@@@@@@aa$@@@@@
++;;;;;;-_-----------------:    :a&a;:-------------;,,,...,:,:;+$@@@@$$$a&@@@@@@@
+*++++-,-,_---------------.   ,a&&&&&a:--------------_,,_:;__:*$$@@$$$$*#@@@@@@@@
+*+++_:-_,;-------------;    +&&&&&&&&&-;-----------___-----;_$$@@$$@$*&@@@@@@@@$
++++-_____,------------,    a&a++++a&&&&a;-----------------_-$$@@$@@$*#@@@@@@@$&a
++++++++++;_----------:   ,a&*,.  .,;a&&&a_;---------------_$@@@@@@@a&@@@@@@@#*&@
++++++++++-,---------;   -a&&,,     ,,a&&&&-,-----------__:&@@@@@@@@@@@@@@@@aa$@@
+-_-+++++++-:_------_   *&&&&+,      ,+&&&&&.:-------_;::_:$@$@@@@@@@@@@@@$a&@@@@
+aa*---___--;,_-----,  -a&&&&&;,      _&&&&&,;;----_,...  .-&$$@@@@@@@@@@&*$@@@@@
+aaaaaaaaaaaaa:_----,  ;a&&&&&&a-,...,*&&&&a.._----:.  .:    _#@@@@@@@@@aa$@@@@@@
+aaaaaaaaaaaaaa:_---; :-_a&&&&&&&&aaaaaa&&a_..;-----, ;#$.    -@@@@@@@@@@@@@@@@#$
+aaaaaaaaaaaaaaa-;---;--_;aaa&&&&&&&&&&&&a_.:__----:  &$*     -@@@@@@@@@@@@@@@@$#
+aaaaaaaaaaaaaaaa*;_------_-a&&&&&&&&&&&a:,;,_---_;,  a_      +@@@@@@@@@@@@@#&$@@
+aaaaaaaaaaaaaaaaaa_;-------;+a&&&&&&&a+ .;_;;--a&$a          a@@@@@@@@@@$a_*#$@@
+aaaaaaaaaaaaaaaaaaa-;--------;-*aaaaa: ,:;_:_a$@@@$a;;;;_-+**&@@@@@@@@$a,.a@@@@@
+aaaaaaaaaaaaaaaaaaaa*;_---------_;,. ..,___;&$$@@@@@@@@@@@@@@@@@&#@@#*. _#$@@@@@
+aaaaaaaaaaaaaaaaaaaaaa-;-----------_;_----;a$$@$@@@@@@@@@@@@@@@@$&a*. .a$$a#@@@@
+aaaaaaaaaaaaaaaaaaaaaaa+:----------------_a$@@$$$@@@@@@@@@@@@@@@@$a  +#$&a&$@@@@
+aaaaaaaaaaaaaaaaaaaaaaaa*;_--------------;#$$$&a&@@@@@@@@@@@@@@@$a.-a$&a#$$@@@@@
+aaaaaaaaaaaaaaaaaaaaaaaaa*__--------------$$a*&@@@@@@@@@@@@@@@@@#*#@#&#$$@@@@@@@
+aaaaaaaaaaaaaaaaaaaaaaaaaa*-;------------;aa#$$@@@@@@$&a#@@@@@@$@@@@@@@$@@@@@@@@
+aaaaaaaaaaaaaaaaaaaaaaaaaaaa;----------_:,&@$@@@@@@#aa#@@@@@@$$@@@@@@@@@@@@@@@@@
+
+/Library/Java/JavaVirtualMachines/liberica-jdk-8.jdk/Contents/Home/bin/java -javaagent:/Applications/IntelliJ IDEA.app/Contents/lib/idea_rt.jar=53946:/Applications/IntelliJ IDEA.app/Contents/bin -Dfile.encoding=UTF-8 -classpath /Library/Java/JavaVirtualMachines/liberica-jdk-8.jdk/Contents/Home/jre/lib/charsets.jar:/Library/Java/JavaVirtualMachines/liberica-jdk-8.jdk/Contents/Home/jre/lib/ext/cldrdata.jar:/Library/Java/JavaVirtualMachines/liberica-jdk-8.jdk/Contents/Home/jre/lib/ext/dnsns.jar:/Library/Java/JavaVirtualMachines/liberica-jdk-8.jdk/Contents/Home/jre/lib/ext/jaccess.jar:/Library/Java/JavaVirtualMachines/liberica-jdk-8.jdk/Contents/Home/jre/lib/ext/localedata.jar:/Library/Java/JavaVirtualMachines/liberica-jdk-8.jdk/Contents/Home/jre/lib/ext/nashorn.jar:/Library/Java/JavaVirtualMachines/liberica-jdk-8.jdk/Contents/Home/jre/lib/ext/sunec.jar:/Library/Java/JavaVirtualMachines/liberica-jdk-8.jdk/Contents/Home/jre/lib/ext/sunjce_provider.jar:/Library/Java/JavaVirtualMachines/liberica-jdk-8.jdk/Contents/Home/jre/lib/ext/sunpkcs11.jar:/Library/Java/JavaVirtualMachines/liberica-jdk-8.jdk/Contents/Home/jre/lib/ext/zipfs.jar:/Library/Java/JavaVirtualMachines/liberica-jdk-8.jdk/Contents/Home/jre/lib/jce.jar:/Library/Java/JavaVirtualMachines/liberica-jdk-8.jdk/Contents/Home/jre/lib/jfr.jar:/Library/Java/JavaVirtualMachines/liberica-jdk-8.jdk/Contents/Home/jre/lib/jsse.jar:/Library/Java/JavaVirtualMachines/liberica-jdk-8.jdk/Contents/Home/jre/lib/management-agent.jar:/Library/Java/JavaVirtualMachines/liberica-jdk-8.jdk/Contents/Home/jre/lib/resources.jar:/Library/Java/JavaVirtualMachines/liberica-jdk-8.jdk/Contents/Home/jre/lib/rt.jar:/Library/Java/JavaVirtualMachines/liberica-jdk-8.jdk/Contents/Home/lib/dt.jar:/Library/Java/JavaVirtualMachines/liberica-jdk-8.jdk/Contents/Home/lib/jconsole.jar:/Library/Java/JavaVirtualMachines/liberica-jdk-8.jdk/Contents/Home/lib/sa-jdi.jar:/Library/Java/JavaVirtualMachines/liberica-jdk-8.jdk/Contents/Home/lib/tools.jar:/Users/nikitamorozov/IdeaProjects/prodaction/ascii-converter/lib/out/production/lib:/Applications/IntelliJ IDEA.app/Contents/plugins/Kotlin/kotlinc/lib/kotlin-stdlib.jar:/Applications/IntelliJ IDEA.app/Contents/plugins/Kotlin/kotlinc/lib/kotlin-reflect.jar:/Applications/IntelliJ IDEA.app/Contents/plugins/Kotlin/kotlinc/lib/kotlin-test.jar:/Users/nikitamorozov/.m2/repository/org/junit/jupiter/junit-jupiter/5.7.0/junit-jupiter-5.7.0.jar:/Users/nikitamorozov/.m2/repository/org/junit/jupiter/junit-jupiter-api/5.7.0/junit-jupiter-api-5.7.0.jar:/Users/nikitamorozov/.m2/repository/org/apiguardian/apiguardian-api/1.1.0/apiguardian-api-1.1.0.jar:/Users/nikitamorozov/.m2/repository/org/opentest4j/opentest4j/1.2.0/opentest4j-1.2.0.jar:/Users/nikitamorozov/.m2/repository/org/junit/platform/junit-platform-commons/1.7.0/junit-platform-commons-1.7.0.jar:/Users/nikitamorozov/.m2/repository/org/junit/jupiter/junit-jupiter-params/5.7.0/junit-jupiter-params-5.7.0.jar:/Users/nikitamorozov/.m2/repository/org/junit/jupiter/junit-jupiter-engine/5.7.0/junit-jupiter-engine-5.7.0.jar:/Users/nikitamorozov/.m2/repository/org/junit/platform/junit-platform-engine/1.7.0/junit-platform-engine-1.7.0.jar MainKt
+-::;_---::;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;:.   ;aaa-:;;;;;;;;;;;;;;;;;;;;
+_------:.:::::::;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;:,   .-aaaa&*::;:;;;;;;;;;;;;;;;;
+;;__--_.:::::::;;;;;;;;;;;;;;;;;;;;;;;;;;;;;:;:.   _aa&&aa&&a;:::;;;;;;;;;;;;;;;
+::::::.,::::::;;;;;;;;;;;;;;;;;::;;;;;;;;;;::,   ,+aaaa&&&&&&a;::;:;;;;;;;;;;:::
+::::::.:::::::;;;;;;;;;;::;;;;:::;:;;;;;;;;:.   :aaaa&&&&&a&&&a_:;;;;;;;;;;;;:::
+,,,:::,:::::::;;;;;;;;;;;:,,:;:::,::;;;;;:,   .-aa_;_-*aa&aaaaaa_,::::;;::::::::
+;;,.,:::::::::;;;;;;;;;;;;;:,;:::,,::;;::.   :*aa:,....:+aaaaaaaa:.::::::::::,:_
+;;;;:.::::::::;;;;;;;;;;;;;;:;::::::::,.   .+aaaa,.     ._a&&&aaa:..::::,,,_*#$$
+_;;;;;.:::::::;;;;;;;;;;;;;;;;:,::;:,.  .,:,*&aaa_.      ,-aaaaa:...::,:-#$@@@@@
+_;;;;;,:::::::;;;;;;;;;;;;;;:;;;;:,:,,,,,:::,*aaaa_..   ..-&&aa;..,:.;a$@@@$@@$&
+;;;;;;,:::::::::;;;;;;;;;;;;;;;;:, ....,,:::::*aaaa*_:,,:-aa&*:.,,..*$@$@@@@$a-*
+;;;;;;,:::::::::;;;;;;;;;;;;;;;:,.  ,.:.:,::::,*aaaaaaaaaaaa-,....-#$@@@@$$*_a@@
+;;;;;,,:::::::::;;;;;;;;;;;;::.    .:::::,:::::,-aaaaaaaaa+:..,.:&$@@@@@$&_a@@@@
+;::,,:::::::::::;;;;;;;;;;;:,     .::::;:.,:::::,:-aaaa+_:.,.,,:#$@@@@@@*+$@@@@@
+;,,,,,,:::::::::;;;;;;;;;;,    ,-a-,,::;::;:::::::,,......,.,,;$@@@@@$$-*@@@@@@@
+;;;;;;.:.::::::::;;;;;;;:.   .-aaaaa-,:;;;;;;;:::::::..:,,::,_$$@@@@$$_&@@@@@@@@
+;;;;:,::.,:::::::;;:;;;,    ;aaa&aaaa*;,:;;;;;;;:::::::::::,:$@@@@@@$;&@@@@@@@@$
+;;;::::::,:::::::;;;;:.    -a*;;;;-aaaa-,:;;;;;;;::::::::::;$$@@@@@$_&@@@@@@@$*-
+;;;;;;;;;,:::::::::;;,   .+a_..  ..,*aaa*:,:;;;::::::::::::$@@@@@@@+&@@@@@@@#_a@
+;;;;;;;;;;.:::::::;:,   ;*aa..     .,*aaaa:,:::::::::::::,a@@@@@@@@@@@@@@@@+-$@@
+:::;;;;;;;:,::::::::   _aaaa;.      .;aaaaa.,::::::::,,,:,$@$@@@@@@@@@@@@$-a@@@@
+--_;:::::::,,::::::.  :*aaaa*,.      :aaaaa.,,:::::....  .;a$@@@@@@@@@@@a_$@@@@@
+-------------,:::::.  ,**aaaaa-:....._aaaa*..:::::,.  .,    :&@@@@@@@@@++$@@@@@@
+--------------,::::, ,::***aaaa&a*+++**aa*:..,:::::. ,#$.    :@@@@@@@@@@@@@@@@#$
+---------------:,:::,:::,-****aaaaaaaaa**:.,::::::,  a$_     :@@@@@@@@@@@@@@@@$&
+----------------_,:::::::::+aaaaaaaaaaa-,.,,:::::,.  -:      ;@@@@@@@@@@@@@#a$@@
+------------------:::::::::,;+aaaaaa**; .,:,,::-&$*          -@@@@@@@@@@$+:_#$@@
+-------------------;,::::::::,:_+***-, ,,,:,:-$@@@$+,,,,::;__a@@@@@@@@#+..+@@@@@
+--------------------_,:::::::::::,......:::,a$@@@@@@@@@@@@@@@@@@a&@@#_. :&@@@@@@
+----------------------:,::::::::::::,:::::,*$@@@@@@@@@@@@@@@@@@@$a+_. .-$$*#@@@@
+-----------------------;,:::::::::::::::::*@@@@$$@@@@@@@@@@@@@@@@$-  ;&$a-&$@@@@
+------------------------_,:::::::::::::::,#$@$*-a@@@@@@@@@@@@@@@@*.:*$a+&@@@@@@@
+-------------------------_::::::::::::::::$#+_a@@@@@@@@@@@@@@@@@#-#@#a#$$@@@@@@@
+---------------------------:,::::::::::::,--&$@@@@@@@$a-&@@@@@@$@@@@@@@@@@@@@@@@
++---------------------------,:::::::::::,.a@@@@@@@@&++#@@@@@@$$@@@@@@@@@@@@@@@@@
+
+Process finished with exit code 0
+
+
+

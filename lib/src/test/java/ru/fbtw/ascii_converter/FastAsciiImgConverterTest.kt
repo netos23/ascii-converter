@@ -2,17 +2,19 @@ package ru.fbtw.ascii_converter
 
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
-
+import printAsciiImg
+import printAsciiImgAsHTML
 import ru.fbtw.ascii_converter.core.AsciiImgConverterConfiguration
 import ru.fbtw.ascii_converter.core.MatchData
-import printAsciiImg
-
+import ru.fbtw.ascii_converter.utill.Color
 import java.io.File
+import java.io.FileOutputStream
 import javax.imageio.ImageIO
+import ru.fbtw.ascii_converter.core.extractByFrequency as extractors
 
 internal class FastAsciiImgConverterTest {
 
-    private val testFile = File("""assets/tom.jpg""")
+    private val testFile = File("""assets/racon.jpeg""")
 
     // ' ', '.', ',', ':', ';', '_', '-', '+', '*', 'a', '&', '#', '$', '@'
 
@@ -33,15 +35,38 @@ internal class FastAsciiImgConverterTest {
         AverageMatchData('@', 0.9),
     )
 
-    private val matchDataReversed = matchData.reversed()
+
+    private val matchDataReversed = Array<MatchData<Double>>(matchData.size) { i ->
+        AverageMatchData(matchData[i].char, matchData[matchData.size - 1 - i].predicate)
+    }.toList()
 
     @Test
     fun convert() {
         val converter = FastAsciiImgConverter(matcher = AverageCharMatcher(matchData))
 
-        val charImg = converter.convert(ImageIO.read(testFile), AsciiImgConverterConfiguration(80, 35))
+        val charImg = converter.convert(ImageIO.read(testFile), AsciiImgConverterConfiguration(500, 200))
         Assertions.assertNotNull(charImg)
         printAsciiImg(charImg)
+    }
+
+
+    @Test
+    fun convertColored() {
+        val converter = ColoredAsciiImageConverter(
+            colorExtractor = { extractors(it) },
+            FastAsciiImgConverter(
+                matcher = AverageCharMatcher(matchDataReversed),
+            ),
+        )
+
+
+        val charImg = converter.convert(ImageIO.read(testFile), AsciiImgConverterConfiguration(200, 150))
+        Assertions.assertNotNull(charImg)
+        printAsciiImgAsHTML(
+            background = Color(java.awt.Color.WHITE.rgb),
+            asciiImg = charImg,
+            outputStream = FileOutputStream("target/test.html")
+        )
     }
 
     @Test

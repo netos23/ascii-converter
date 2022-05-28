@@ -15,7 +15,7 @@ abstract class AbstractAsciiImgConverter(
     protected val rgbFilterChain: List<RgbFilter>? = null,
     protected val grayscaleFilterFilterChain: List<GrayscaleFilter>? = null,
     protected val matcher: CharMatcher
-) : AsciiImgConverter {
+) : AsciiImgConverter<Char> {
 
     protected abstract fun doImgFilter(img: BufferedImage): BufferedImage
 

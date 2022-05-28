@@ -6,7 +6,8 @@ import styled.StyleSheet
 object FileUploaderStyles : StyleSheet("file-uploader", isStatic = true) {
 
     val fileInput by css {
-
+        backgroundColor = Color.black
+        textAlign = TextAlign.center
     }
 
     val body by css {

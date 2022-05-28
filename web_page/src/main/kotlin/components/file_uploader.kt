@@ -2,12 +2,14 @@ package components
 
 
 import kotlinx.html.InputType
-import kotlinx.html.js.onChangeFunction
+import kotlinx.html.hidden
+import kotlinx.html.id
 import org.w3c.dom.events.Event
 import react.*
+import react.dom.input
 import styled.css
 import styled.styledDiv
-import styled.styledInput
+import styled.styledLabel
 import styles.FileUploaderStyles
 
 external interface FileUploaderProps : RProps {
@@ -15,6 +17,8 @@ external interface FileUploaderProps : RProps {
 }
 
 class FileUploader : RComponent<FileUploaderProps, RState>() {
+
+    private val fileId = "file-input"
 
     override fun RBuilder.render() {
         styledDiv {
@@ -25,12 +29,20 @@ class FileUploader : RComponent<FileUploaderProps, RState>() {
                 css {
                     +FileUploaderStyles.body
                 }
-                styledInput {
+                styledLabel {
                     css {
                         +FileUploaderStyles.fileInput
                     }
                     attrs {
+                        htmlFor = fileId
+                    }
+                    +"Browse file..."
+                }
+                input {
+                    attrs {
+                        id = fileId
                         type = InputType.file
+                        hidden = true
                     }
                 }
             }
