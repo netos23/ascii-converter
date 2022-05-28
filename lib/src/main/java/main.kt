@@ -1,3 +1,4 @@
+import ru.fbtw.ascii_converter.io.printAsciiImg
 import ru.fbtw.ascii_converter.utill.*
 import java.awt.image.BufferedImage
 import java.io.File

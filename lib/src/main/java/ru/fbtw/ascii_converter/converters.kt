@@ -82,12 +82,18 @@ class AverageCharMatcher(override val charset: List<MatchData<Double>>) :
     }
 }
 
-class ColoredAsciiImageConverter(
+class ColoredAsciiImageConverter<T>(
     private val colorExtractor: (SubMatrix<Int>) -> Color,
-    private val asciiImgConverter: AbstractAsciiImgConverter,
-) : AsciiImgConverter<Pair<Char, Color>> {
+    private val asciiImgConverter: AsciiImgConverter<T>,
+) : AsciiImgConverter<Pair<T, Color>> {
 
-    override fun convert(img: BufferedImage, config: AsciiImgConverterConfiguration): Array<Array<Pair<Char, Color>>> {
+    override fun convert(img: BufferedImage, config: AsciiImgConverterConfiguration): Array<Array<Pair<T, Color>>> {
+        assert(
+            img.height > config.h
+        ) {
+            "Image resolution lower then ascii dimensions"
+        }
+
         val imageMatrix = img.toMatrix()
         val segmentHeight = imageMatrix.size / config.h
         val segmentWidth = imageMatrix[0].size / config.w
@@ -103,7 +109,7 @@ class ColoredAsciiImageConverter(
                         x * segmentWidth,
                         y * segmentHeight,
                         min(segmentWidth, remainingWidth),
-                        min(segmentHeight, remainingHeight)
+                        min(segmentHeight, remainingHeight),
                     )
                 )
             }
@@ -117,6 +123,13 @@ class ColoredAsciiImageConverter(
             }
         }
     }
+}
+
+class GifAsciiImageConverter<T>(
+    private val asciiImgConverter: AsciiImgConverter<T>,
+) : GifImageConverter<T> {
+    override fun convert(images: List<BufferedImage>, config: AsciiImgConverterConfiguration): List<Array<Array<T>>> =
+        images.map { asciiImgConverter.convert(it, config) }
 }
 
 data class AverageMatchData(override val char: Char, override val predicate: Double) : MatchData<Double>

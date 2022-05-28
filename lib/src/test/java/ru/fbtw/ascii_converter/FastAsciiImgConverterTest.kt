@@ -1,20 +1,25 @@
 package ru.fbtw.ascii_converter
 
+import GifDecoder
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
-import printAsciiImg
-import printAsciiImgAsHTML
 import ru.fbtw.ascii_converter.core.AsciiImgConverterConfiguration
 import ru.fbtw.ascii_converter.core.MatchData
-import ru.fbtw.ascii_converter.utill.Color
+import ru.fbtw.ascii_converter.io.printAsciiImg
+import ru.fbtw.ascii_converter.io.writeGifAsciiImage
+import java.awt.Color
+import java.awt.Font
 import java.io.File
+import java.io.FileInputStream
 import java.io.FileOutputStream
 import javax.imageio.ImageIO
 import ru.fbtw.ascii_converter.core.extractByFrequency as extractors
 
+
 internal class FastAsciiImgConverterTest {
 
     private val testFile = File("""assets/racon.jpeg""")
+    private val gifFile = "assets/ex_gif.gif"
 
     // ' ', '.', ',', ':', ';', '_', '-', '+', '*', 'a', '&', '#', '$', '@'
 
@@ -59,14 +64,69 @@ internal class FastAsciiImgConverterTest {
             ),
         )
 
+        val decoder = GifDecoder()
+        decoder.read(FileInputStream(gifFile))
 
-        val charImg = converter.convert(ImageIO.read(testFile), AsciiImgConverterConfiguration(200, 150))
+
+        val img = ImageIO.read(testFile)
+        val charImg = converter.convert(
+            /*decoder.getFrame(4) ?:*/
+            img,
+            AsciiImgConverterConfiguration(200, 150),
+        )
         Assertions.assertNotNull(charImg)
-        printAsciiImgAsHTML(
-            background = Color(java.awt.Color.WHITE.rgb),
+/*        writeAsciiImgAsHTML(
+//            background = Color(java.awt.Color.WHITE.rgb),
             asciiImg = charImg,
             outputStream = FileOutputStream("target/test.html")
+        )*/
+        /* val image = writeAsciiImgAsImage(
+ //            background = Color(java.awt.Color.WHITE.rgb),
+             asciiImg = charImg,
+             font = Font("Courier", Font.PLAIN, 20)
+         )
+         ImageIO.write(image,"png", File("assets/test.jpg"))
+         */
+    }
+
+    @Test
+    fun testConvertGif() {
+        val converter = GifAsciiImageConverter(
+            ColoredAsciiImageConverter(
+                colorExtractor = { extractors(it) },
+                FastAsciiImgConverter(
+                    matcher = AverageCharMatcher(matchData),
+                ),
+            ),
         )
+
+        val decoder = GifDecoder()
+        decoder.read(FileInputStream(gifFile))
+
+        val charImg = converter.convert(
+            /*decoder.getFrame(4) ?:*/
+            Array(decoder.frameCount) { decoder.getFrame(it)!! }.toList(),
+            AsciiImgConverterConfiguration(300, 200),
+        )
+        Assertions.assertNotNull(charImg)
+        writeGifAsciiImage(
+            background = ru.fbtw.ascii_converter.utill.Color(Color.WHITE.rgb),
+            asciiImg = charImg,
+            outputStream = FileOutputStream("assets/test.gif"),
+            font = Font("Courier", Font.PLAIN, 10)
+        )
+/*        writeAsciiImgAsHTML(
+//            background = Color(java.awt.Color.WHITE.rgb),
+            asciiImg = charImg,
+            outputStream = FileOutputStream("target/test.html")
+        )*/
+        /* val image = writeAsciiImgAsImage(
+ //            background = Color(java.awt.Color.WHITE.rgb),
+             asciiImg = charImg,
+             font = Font("Courier", Font.PLAIN, 20)
+         )
+         ImageIO.write(image,"png", File("assets/test.jpg"))
+         */
     }
 
     @Test
