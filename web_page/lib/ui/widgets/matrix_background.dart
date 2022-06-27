@@ -1,7 +1,9 @@
 import 'dart:collection';
 import 'dart:math';
+import 'package:google_fonts/google_fonts.dart';
 import 'dart:ui'
     show
+        FontFeature,
         Image,
         ParagraphBuilder,
         ParagraphConstraints,
@@ -58,7 +60,7 @@ class MatrixBackground extends StatefulWidget {
   const MatrixBackground({
     Key? key,
     this.child,
-    this.style: const MatrixRainStyle._(),
+    this.style: const MatrixRainStyle.only(),
   }) : super(key: key);
 
   final Widget? child;
@@ -130,40 +132,35 @@ class MatrixRainPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    final screenRect = Offset.zero & size;
-    // canvas.drawRect(screenRect, Paint()..color = backgroundColor);
-
-    var maskPaint = Paint()..color = style.maskColor;
     var textPaint = Paint()..color = style.textColor;
 
-    canvas.drawRect(screenRect, maskPaint);
-
-    final columns = (size.width / style.fontSize).round();
+    final columns = (size.width / (style.fontSize * 0.61)).round();
     final rows = (size.height / style.fontSize).round();
     state.resize(columns, rows);
 
-    for (var b = 1; b <= style.levels; b++) {
-      for (var char in state.getLevel(b)) {
-        final text = TextPainter(
-          text: TextSpan(
-            text: String.fromCharCode(char.char),
-            style: TextStyle(
-              fontSize: style.fontSize,
-              foreground: textPaint,
-              // color: style.textColor,
-            ),
+    for (var r = 0; r < rows; r++) {
+      final text = TextPainter(
+        maxLines: 1,
+        text: TextSpan(
+          text: state.getRow(r),
+          style: GoogleFonts.cutiveMono(
+            fontWeight: FontWeight.w400,
+            fontSize: style.fontSize,
+            foreground: textPaint,
+            // color: style.textColor,
           ),
-          textDirection: TextDirection.ltr,
-        );
-        text.layout(maxWidth: style.fontSize, minWidth: style.fontSize);
-        text.paint(
-          canvas,
-          Offset(
-            style.fontSize * char.x,
-            style.fontSize * char.y,
-          ),
-        );
-      }
+        ),
+        textDirection: TextDirection.ltr,
+      );
+
+      text.layout(
+        maxWidth: size.width,
+        minWidth: size.width,
+      );
+      text.paint(
+        canvas,
+        Offset(0, style.fontSize * r),
+      );
     }
   }
 
@@ -179,13 +176,18 @@ class MatrixRainStyle {
   final Color backgroundColor;
   final int levels;
 
-  const MatrixRainStyle._()
-      : this(
-          fontSize: 11,
-          textColor: const Color(0xff00ff95),
-          maskColor: const Color(0xD000000),
-          backgroundColor: Colors.black,
-          levels: 10,
+  const MatrixRainStyle.only({
+    double? fontSize,
+    Color? textColor,
+    Color? maskColor,
+    Color? backgroundColor,
+    int? levels,
+  }) : this(
+          fontSize: fontSize ?? 25,
+          textColor: textColor ?? const Color(0xff00ff95),
+          maskColor: maskColor ?? const Color(0xD000000),
+          backgroundColor: backgroundColor ?? Colors.black,
+          levels: levels ?? 10,
         );
 
   const MatrixRainStyle({
@@ -202,22 +204,48 @@ class MatrixRainPainterState {
 
   final Random random = Random();
   final List<int> _sizes = [];
-  final LinkedList<CharWithBrightness> screenChars = LinkedList();
+  final List<List<int>> screenChars = [];
+
+  // final LinkedList<CharWithBrightness> screenChars = LinkedList();
   final int _maxBrightness;
   int _maxRows = 10;
+  int _maxCols = 10;
   int _buildId = 0;
   bool _dirty = true;
 
   get buildId => _buildId;
 
-  Iterable<CharWithBrightness> getLevel(int level) =>
-      screenChars.where((ch) => ch.supportLevel(level));
+  String getColumn(int column) => String.fromCharCodes(
+        screenChars[column].expand(
+          (ch) => [ch, 10],
+        ),
+      );
+
+  String getRow(int r) => String.fromCharCodes(
+        screenChars.take(_maxCols).map(
+              (column) => column[r],
+            ),
+      );
 
   void resize(int columns, int rows) {
-    _maxRows = rows;
+    var dirty = false;
 
     while (columns > _sizes.length) {
+      dirty = true;
       _sizes.add(0);
+      screenChars.add([]);
+    }
+    _maxCols = columns;
+
+    if (!dirty && _maxRows >= rows) {
+      return;
+    }
+
+    _maxRows = rows;
+    for (var col in screenChars) {
+      while (rows > col.length) {
+        col.add(whiteSpace);
+      }
     }
   }
 
@@ -237,7 +265,7 @@ class MatrixRainPainterState {
   }
 
   void _dimAndClean() {
-    if (screenChars.isEmpty) {
+    /*if (screenChars.isEmpty) {
       return;
     }
 
@@ -250,7 +278,7 @@ class MatrixRainPainterState {
         sc.unlink();
       }
       sc = next;
-    }
+    }*/
   }
 
   void _addNewChars() {
@@ -258,16 +286,22 @@ class MatrixRainPainterState {
       if (_sizes[c] > _maxRows || random.nextDouble() > 0.975) {
         _sizes[c] = 0;
       }
+
+      if (_sizes[c] >= _maxRows) {
+        continue;
+      }
+
+      screenChars[c][_sizes[c]] = asciiChars[random.nextInt(asciiChars.length)];
       _sizes[c]++;
 
-      screenChars.add(
+      /*screenChars.add(
         CharWithBrightness(
           asciiChars[random.nextInt(asciiChars.length)],
           _maxBrightness,
           c,
           _sizes[c],
         ),
-      );
+      );*/
     }
   }
 }

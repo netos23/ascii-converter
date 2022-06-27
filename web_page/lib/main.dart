@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:web_page/ui/pages/main_page.dart';
 import 'package:web_page/ui/widgets/matrix_background.dart';
 
 void main() {
@@ -16,24 +17,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const DemoScreen(),
-    );
-  }
-}
-
-class DemoScreen extends StatelessWidget {
-  const DemoScreen({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return const Scaffold(
-      body: Center(
-        child: MatrixBackground(
-          child: Center(
-            child: FlutterLogo(),
-          ),
-        ),
-      ),
+      home: const MainPage(),
     );
   }
 }
