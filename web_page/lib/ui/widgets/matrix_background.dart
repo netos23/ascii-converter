@@ -132,13 +132,41 @@ class MatrixRainPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    var textPaint = Paint()..color = style.textColor;
-
     final columns = (size.width / (style.fontSize * 0.61)).round();
     final rows = (size.height / style.fontSize).round();
     state.resize(columns, rows);
+    final screenRect = Offset.zero & size;
 
+    final gradientStep = 1 / columns;
+    final opacityStep = 1 / style.levels;
     for (var r = 0; r < rows; r++) {
+      final colors = <Color>[];
+      final stops = <double>[];
+      final levels = state.getLevelRow(r);
+
+      var currentGradient = 0.0;
+
+      for (var level in levels) {
+        var currentColor = _colorLevel(opacityStep, level);
+
+        if (currentGradient > 0.0000001 && currentGradient <= 1) {
+          stops.add(currentGradient);
+          colors.add(currentColor);
+        }
+
+        currentGradient += gradientStep;
+        if (currentGradient <= 1) {
+          colors.add(currentColor);
+          stops.add(currentGradient);
+        }
+      }
+
+      final textPaint = Paint()
+        ..shader = LinearGradient(
+          colors: colors,
+          stops: stops,
+        ).createShader(screenRect);
+
       final text = TextPainter(
         maxLines: 1,
         text: TextSpan(
@@ -163,6 +191,11 @@ class MatrixRainPainter extends CustomPainter {
       );
     }
   }
+
+  Color _colorLevel(double opacityStep, int level) =>
+      style.textColor.withOpacity(
+        max(1 - opacityStep * level, 0),
+      );
 
   @override
   bool shouldRepaint(MatrixRainPainter oldDelegate) =>
@@ -205,6 +238,8 @@ class MatrixRainPainterState {
   final Random random = Random();
   final List<int> _sizes = [];
   final List<List<int>> screenChars = [];
+  final List<List<int>> levelsMatrix = [];
+  final List<List<int>> colors = [];
 
   // final LinkedList<CharWithBrightness> screenChars = LinkedList();
   final int _maxBrightness;
@@ -227,6 +262,15 @@ class MatrixRainPainterState {
             ),
       );
 
+  Iterable<int> getLevelRow(int r) => levelsMatrix
+      .take(_maxCols)
+      .map(
+        (c) => c[r],
+      )
+      .map(
+        (l) => _buildId - l,
+      );
+
   void resize(int columns, int rows) {
     var dirty = false;
 
@@ -234,6 +278,7 @@ class MatrixRainPainterState {
       dirty = true;
       _sizes.add(0);
       screenChars.add([]);
+      levelsMatrix.add([]);
     }
     _maxCols = columns;
 
@@ -242,9 +287,19 @@ class MatrixRainPainterState {
     }
 
     _maxRows = rows;
-    for (var col in screenChars) {
+    _resize(screenChars, whiteSpace, rows);
+    _resize(levelsMatrix, _buildId, rows);
+    /*for (var col in screenChars) {
       while (rows > col.length) {
         col.add(whiteSpace);
+      }
+    }*/
+  }
+
+  void _resize<T>(List<List<T>> matrix, T val, int resizeTo) {
+    for (var col in matrix) {
+      while (resizeTo > col.length) {
+        col.add(val);
       }
     }
   }
@@ -292,6 +347,7 @@ class MatrixRainPainterState {
       }
 
       screenChars[c][_sizes[c]] = asciiChars[random.nextInt(asciiChars.length)];
+      levelsMatrix[c][_sizes[c]] = _buildId;
       _sizes[c]++;
 
       /*screenChars.add(
