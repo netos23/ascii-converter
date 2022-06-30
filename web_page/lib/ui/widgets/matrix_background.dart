@@ -1,20 +1,8 @@
-import 'dart:collection';
 import 'dart:math';
-import 'package:google_fonts/google_fonts.dart';
-import 'dart:ui'
-    show
-        FontFeature,
-        Image,
-        ParagraphBuilder,
-        ParagraphConstraints,
-        ParagraphStyle,
-        TextStyle;
 
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
-const ascii = 'A1B-CDE=FGH2IJ3KLMNO45P6QRSTUV+WXYZ89@';
-
-const whiteSpace = 32;
 const asciiChars = [
   65,
   49,
@@ -55,80 +43,161 @@ const asciiChars = [
   57,
   64,
 ];
+const whiteSpaceChar = 32;
+const newLineChar = 10;
 
-class MatrixBackground extends StatefulWidget {
-  const MatrixBackground({
-    Key? key,
-    this.child,
-    this.style: const MatrixRainStyle.only(),
-  }) : super(key: key);
+class DiscreteAnimation extends ChangeNotifier {
+  final Animation<double> parent;
+  bool dirty = false;
 
-  final Widget? child;
-  final MatrixRainStyle style;
+  DiscreteAnimation(this.parent) {
+    start();
+  }
 
-  @override
-  State<MatrixBackground> createState() => _MatrixBackgroundState();
+  void start() {
+    parent.addListener(() {
+      if (parent.value < 0.5) {
+        dirty = true;
+        return;
+      }
+
+      if (parent.value > 0.5 && dirty) {
+        dirty = false;
+        notifyListeners();
+      }
+    });
+  }
 }
 
-class _MatrixBackgroundState extends State<MatrixBackground>
-    with SingleTickerProviderStateMixin {
-  late AnimationController _controller;
+class _MatrixRainPainterState {
+  final Random _random = Random();
 
-  late final MatrixRainPainterState matrixRainPainterState;
+  final List<int> _sizes = [];
+  final List<List<int>> _screenChars = [];
+  final List<List<int>> _levelsMatrix = [];
+  int _maxRows = 10;
 
-  @override
-  void initState() {
-    super.initState();
-    _controller = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 150),
-    )..repeat();
+  int _maxCols = 10;
+  int _buildId = 0;
 
-    matrixRainPainterState = MatrixRainPainterState(widget.style.levels);
-  }
+  _MatrixRainPainterState();
 
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
+  String getColumn(int column) => String.fromCharCodes(
+        _screenChars[column].expand(
+          (char) => [char, 10],
+        ),
+      );
 
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      height: double.infinity,
-      color: Colors.black,
-      child: AnimatedBuilder(
-        animation: _controller,
-        child: widget.child,
-        builder: (BuildContext context, Widget? child) {
-          matrixRainPainterState.update(_controller.view);
+  Iterable<int> getLevelRow(int row) => _levelsMatrix
+      .take(_maxCols)
+      .map(
+        (column) => column[row],
+      )
+      .map(
+        (level) => _buildId - level,
+      );
 
-          return CustomPaint(
-            painter: MatrixRainPainter(
-              style: widget.style,
-              state: matrixRainPainterState,
-              timestamp: matrixRainPainterState.buildId,
+  String getRow(int r) => String.fromCharCodes(
+        _screenChars.take(_maxCols).map(
+              (column) => column[r],
             ),
-            child: child,
-          );
-        },
-      ),
-    );
+      );
+
+  void resize(int columns, int rows) {
+    var dirty = false;
+
+    while (columns > _sizes.length) {
+      dirty = true;
+      _sizes.add(0);
+      _screenChars.add([]);
+      _levelsMatrix.add([]);
+    }
+    _maxCols = columns;
+
+    if (!dirty && _maxRows >= rows) {
+      return;
+    }
+
+    _maxRows = rows;
+    _resize(_screenChars, whiteSpaceChar, rows);
+    _resize(_levelsMatrix, _buildId, rows);
+  }
+
+  void update() {
+    _buildId++;
+    _addNewChars();
+  }
+
+  void _addNewChars() {
+    for (var c = 0; c < _sizes.length; c++) {
+      if (_sizes[c] > _maxRows || _random.nextDouble() > 0.975) {
+        _sizes[c] = 0;
+      }
+
+      if (_sizes[c] >= _maxRows) {
+        continue;
+      }
+
+      _screenChars[c][_sizes[c]] = asciiChars[_nextChar()];
+      _levelsMatrix[c][_sizes[c]] = _buildId;
+      _sizes[c]++;
+    }
+  }
+
+  int _nextChar() => _random.nextInt(asciiChars.length);
+
+  void _resize<T>(List<List<T>> matrix, T val, int resizeTo) {
+    for (var col in matrix) {
+      while (resizeTo > col.length) {
+        col.add(val);
+      }
+    }
   }
 }
 
-class MatrixRainPainter extends CustomPainter {
-  MatrixRainPainter({
-    required this.style,
-    required this.state,
-    required this.timestamp,
+class MatrixRainStyle {
+  final double fontSize;
+  final Color textColor;
+  final Color backgroundColor;
+  final int levels;
+  final TextStyle textStyle;
+  final Duration duration;
+
+  const MatrixRainStyle({
+    required this.fontSize,
+    required this.textColor,
+    required this.backgroundColor,
+    required this.levels,
+    required this.textStyle,
+    required this.duration,
   });
 
+  const MatrixRainStyle.only(
+      {double? fontSize,
+      Color? textColor,
+      Color? maskColor,
+      Color? backgroundColor,
+      int? levels,
+      TextStyle? textStyle,
+      Duration? duration})
+      : this(
+          fontSize: fontSize ?? 25,
+          textColor: textColor ?? const Color(0xff00ff95),
+          backgroundColor: backgroundColor ?? Colors.black,
+          levels: levels ?? 20,
+          textStyle: textStyle ?? const TextStyle(),
+          duration: duration ?? const Duration(milliseconds: 123),
+        );
+}
+
+class _MatrixRainPainter extends CustomPainter {
   final MatrixRainStyle style;
-  final MatrixRainPainterState state;
-  final int timestamp;
+  final _MatrixRainPainterState state;
+
+  const _MatrixRainPainter({
+    required this.style,
+    required this.state,
+  });
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -171,11 +240,9 @@ class MatrixRainPainter extends CustomPainter {
         maxLines: 1,
         text: TextSpan(
           text: state.getRow(r),
-          style: GoogleFonts.cutiveMono(
-            fontWeight: FontWeight.w400,
+          style: style.textStyle.copyWith(
             fontSize: style.fontSize,
             foreground: textPaint,
-            // color: style.textColor,
           ),
         ),
         textDirection: TextDirection.ltr,
@@ -192,187 +259,73 @@ class MatrixRainPainter extends CustomPainter {
     }
   }
 
+  @override
+  bool shouldRepaint(_MatrixRainPainter oldDelegate) => true;
+
   Color _colorLevel(double opacityStep, int level) =>
       style.textColor.withOpacity(
         max(1 - opacityStep * level, 0),
       );
+}
+
+class MatrixBackground extends StatefulWidget {
+  final Widget? child;
+
+  final MatrixRainStyle style;
+
+  const MatrixBackground({
+    Key? key,
+    this.child,
+    this.style = const MatrixRainStyle.only(),
+  }) : super(key: key);
 
   @override
-  bool shouldRepaint(MatrixRainPainter oldDelegate) =>
-      timestamp != oldDelegate.timestamp;
+  State<MatrixBackground> createState() => _MatrixBackgroundState();
 }
 
-class MatrixRainStyle {
-  final double fontSize;
-  final Color textColor;
-  final Color maskColor;
-  final Color backgroundColor;
-  final int levels;
+class _MatrixBackgroundState extends State<MatrixBackground>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
 
-  const MatrixRainStyle.only({
-    double? fontSize,
-    Color? textColor,
-    Color? maskColor,
-    Color? backgroundColor,
-    int? levels,
-  }) : this(
-          fontSize: fontSize ?? 25,
-          textColor: textColor ?? const Color(0xff00ff95),
-          maskColor: maskColor ?? const Color(0xD000000),
-          backgroundColor: backgroundColor ?? Colors.black,
-          levels: levels ?? 10,
-        );
+  late final _MatrixRainPainterState matrixRainPainterState;
 
-  const MatrixRainStyle({
-    required this.fontSize,
-    required this.textColor,
-    required this.maskColor,
-    required this.backgroundColor,
-    required this.levels,
-  });
-}
-
-class MatrixRainPainterState {
-  MatrixRainPainterState(this._maxBrightness);
-
-  final Random random = Random();
-  final List<int> _sizes = [];
-  final List<List<int>> screenChars = [];
-  final List<List<int>> levelsMatrix = [];
-  final List<List<int>> colors = [];
-
-  // final LinkedList<CharWithBrightness> screenChars = LinkedList();
-  final int _maxBrightness;
-  int _maxRows = 10;
-  int _maxCols = 10;
-  int _buildId = 0;
-  bool _dirty = true;
-
-  get buildId => _buildId;
-
-  String getColumn(int column) => String.fromCharCodes(
-        screenChars[column].expand(
-          (ch) => [ch, 10],
-        ),
-      );
-
-  String getRow(int r) => String.fromCharCodes(
-        screenChars.take(_maxCols).map(
-              (column) => column[r],
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      height: double.infinity,
+      color: Colors.black,
+      child: AnimatedBuilder(
+        animation: DiscreteAnimation(_controller),
+        child: widget.child,
+        builder: (BuildContext context, Widget? child) {
+          matrixRainPainterState.update();
+          return CustomPaint(
+            painter: _MatrixRainPainter(
+              style: widget.style,
+              state: matrixRainPainterState,
             ),
-      );
-
-  Iterable<int> getLevelRow(int r) => levelsMatrix
-      .take(_maxCols)
-      .map(
-        (c) => c[r],
-      )
-      .map(
-        (l) => _buildId - l,
-      );
-
-  void resize(int columns, int rows) {
-    var dirty = false;
-
-    while (columns > _sizes.length) {
-      dirty = true;
-      _sizes.add(0);
-      screenChars.add([]);
-      levelsMatrix.add([]);
-    }
-    _maxCols = columns;
-
-    if (!dirty && _maxRows >= rows) {
-      return;
-    }
-
-    _maxRows = rows;
-    _resize(screenChars, whiteSpace, rows);
-    _resize(levelsMatrix, _buildId, rows);
-    /*for (var col in screenChars) {
-      while (rows > col.length) {
-        col.add(whiteSpace);
-      }
-    }*/
+            child: child,
+          );
+        },
+      ),
+    );
   }
 
-  void _resize<T>(List<List<T>> matrix, T val, int resizeTo) {
-    for (var col in matrix) {
-      while (resizeTo > col.length) {
-        col.add(val);
-      }
-    }
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
   }
 
-  void update(Animation<double> view) {
-    if (view.value <= 0.5) {
-      _dirty = true;
-    }
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: widget.style.duration,
+    )..repeat();
 
-    if (view.value > 0.5 && _dirty) {
-      _buildId++;
-
-      _dimAndClean();
-      _addNewChars();
-
-      _dirty = false;
-    }
+    matrixRainPainterState = _MatrixRainPainterState();
   }
-
-  void _dimAndClean() {
-    /*if (screenChars.isEmpty) {
-      return;
-    }
-
-    CharWithBrightness? sc = screenChars.first;
-    while (sc != null) {
-      sc.dim();
-
-      final next = sc.next;
-      if (sc.disappear) {
-        sc.unlink();
-      }
-      sc = next;
-    }*/
-  }
-
-  void _addNewChars() {
-    for (var c = 0; c < _sizes.length; c++) {
-      if (_sizes[c] > _maxRows || random.nextDouble() > 0.975) {
-        _sizes[c] = 0;
-      }
-
-      if (_sizes[c] >= _maxRows) {
-        continue;
-      }
-
-      screenChars[c][_sizes[c]] = asciiChars[random.nextInt(asciiChars.length)];
-      levelsMatrix[c][_sizes[c]] = _buildId;
-      _sizes[c]++;
-
-      /*screenChars.add(
-        CharWithBrightness(
-          asciiChars[random.nextInt(asciiChars.length)],
-          _maxBrightness,
-          c,
-          _sizes[c],
-        ),
-      );*/
-    }
-  }
-}
-
-class CharWithBrightness extends LinkedListEntry<CharWithBrightness> {
-  final int char;
-  final int x;
-  final int y;
-  int _brightness;
-
-  CharWithBrightness(this.char, this._brightness, this.x, this.y);
-
-  bool get disappear => _brightness <= 0;
-
-  void dim() => _brightness--;
-
-  bool supportLevel(int level) => _brightness == level;
 }
