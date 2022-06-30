@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:web_page/ui/pages/main_page.dart';
+import 'package:web_page/ui/pages/result_page.dart';
 import 'package:web_page/ui/widgets/matrix_background.dart';
 
 void main() {

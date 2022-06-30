@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:web_page/ui/widgets/dash_button.dart';
 import 'package:web_page/ui/widgets/matrix_background.dart';
 import 'package:web_page/ui/theme/color_theme.dart' as color_theme;
@@ -11,9 +12,13 @@ class MainPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: MatrixBackground(
-        style: const MatrixRainStyle.only(
+        style: MatrixRainStyle.only(
           textColor: color_theme.primary,
           backgroundColor: color_theme.background,
+          // todo: create theme component
+          textStyle: GoogleFonts.cutiveMono(
+            fontWeight: FontWeight.w400,
+          ),
         ),
         child: Center(
           child: OrientationBuilder(builder: (context, orientation) {
