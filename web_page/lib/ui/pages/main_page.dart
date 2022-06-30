@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:web_page/ui/routes.dart';
 import 'package:web_page/ui/widgets/dash_button.dart';
 import 'package:web_page/ui/widgets/matrix_background.dart';
 import 'package:web_page/ui/theme/color_theme.dart' as color_theme;
@@ -21,18 +22,22 @@ class MainPage extends StatelessWidget {
           ),
         ),
         child: Center(
-          child: OrientationBuilder(builder: (context, orientation) {
-            return orientation == Orientation.landscape
-                ? Padding(
-                    padding: const EdgeInsets.all(50.0),
-                    child: _buildBody(
-                      mainAxisSize: MainAxisSize.min,
-                    ),
-                  )
-                : _buildBody(
-                    mainAxisSize: MainAxisSize.max,
-                  );
-          }),
+          child: OrientationBuilder(
+            builder: (context, orientation) {
+              return orientation == Orientation.landscape
+                  ? Padding(
+                      padding: const EdgeInsets.all(50.0),
+                      child: _buildBody(
+                        mainAxisSize: MainAxisSize.min,
+                        context: context,
+                      ),
+                    )
+                  : _buildBody(
+                      mainAxisSize: MainAxisSize.max,
+                      context: context,
+                    );
+            },
+          ),
         ),
       ),
     );
@@ -40,6 +45,7 @@ class MainPage extends StatelessWidget {
 
   Container _buildBody({
     required MainAxisSize mainAxisSize,
+    required BuildContext context,
   }) {
     return Container(
       color: color_theme.darkCard,
@@ -54,14 +60,14 @@ class MainPage extends StatelessWidget {
           ),
           Flexible(
             flex: 2,
-            child: _buildButtonsRow(),
+            child: _buildButtonsRow(context),
           ),
         ],
       ),
     );
   }
 
-  Widget _buildButtonsRow() {
+  Widget _buildButtonsRow(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(20.0),
       child: Row(
@@ -83,7 +89,7 @@ class MainPage extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: DashButton(
-              onPressed: () {},
+              onPressed: () => Navigator.pushNamed(context, configPageRoute),
               background: color_theme.primary,
               child: const Text(
                 'Convert',

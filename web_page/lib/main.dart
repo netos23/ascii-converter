@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:web_page/ui/pages/config_page.dart';
 import 'package:web_page/ui/pages/main_page.dart';
-import 'package:web_page/ui/pages/result_page.dart';
-import 'package:web_page/ui/widgets/matrix_background.dart';
+import 'package:web_page/ui/routes.dart';
 
 void main() {
   runApp(const MyApp());
@@ -19,6 +19,9 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       home: const MainPage(),
+      routes: {
+        configPageRoute : (_) => const ConfigPage()
+      },
     );
   }
 }

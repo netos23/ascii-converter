@@ -15,3 +15,10 @@ final headline2 = GoogleFonts.cutiveMono(
   letterSpacing: -0.5,
   color: color_theme.text,
 );
+
+
+final text = GoogleFonts.cutiveMono(
+  fontSize: 20,
+  fontWeight: FontWeight.w400,
+  color: color_theme.text,
+);
