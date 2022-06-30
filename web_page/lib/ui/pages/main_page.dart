@@ -70,27 +70,27 @@ class MainPage extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: DashButton(
+              onPressed: () {},
+              background: color_theme.primary,
               child: const Text(
                 'Examples',
                 style: TextStyle(
                   color: color_theme.darkText,
                 ),
               ),
-              onPressed: () {},
-              background: color_theme.primary,
             ),
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: DashButton(
+              onPressed: () {},
+              background: color_theme.primary,
               child: const Text(
                 'Convert',
                 style: TextStyle(
                   color: color_theme.darkText,
                 ),
               ),
-              onPressed: () {},
-              background: color_theme.primary,
             ),
           ),
         ],
