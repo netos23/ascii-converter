@@ -65,18 +65,33 @@ class MainPage extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(20.0),
       child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          DashButton(
-            child: Text(
-              'Exampeles',
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: DashButton(
+              child: const Text(
+                'Examples',
+                style: TextStyle(
+                  color: color_theme.darkText,
+                ),
+              ),
+              onPressed: () {},
+              background: color_theme.primary,
             ),
-            onPressed: () {},
           ),
-          DashButton(
-            child: Text(
-              'Convert',
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: DashButton(
+              child: const Text(
+                'Convert',
+                style: TextStyle(
+                  color: color_theme.darkText,
+                ),
+              ),
+              onPressed: () {},
+              background: color_theme.primary,
             ),
-            onPressed: () {},
           ),
         ],
       ),
