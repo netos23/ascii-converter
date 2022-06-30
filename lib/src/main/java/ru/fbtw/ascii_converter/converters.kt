@@ -1,12 +1,10 @@
 package ru.fbtw.ascii_converter
 
-import ru.fbtw.ascii_converter.core.AbstractAsciiImgConverter
-import ru.fbtw.ascii_converter.core.AbstractCharMatcher
-import ru.fbtw.ascii_converter.core.CharMatcher
-import ru.fbtw.ascii_converter.core.MatchData
+import ru.fbtw.ascii_converter.core.*
 import ru.fbtw.ascii_converter.utill.*
 import java.awt.image.BufferedImage
 import java.util.*
+import kotlin.math.min
 import kotlin.math.pow
 
 
@@ -20,11 +18,7 @@ class FastAsciiImgConverter(
 
     override fun doImgFilter(img: BufferedImage): BufferedImage = img
 
-    override fun extractColorMatrix(img: BufferedImage): Array<Array<Int>> = Array(img.height) { row ->
-        Array(img.width) { col: Int ->
-            img[row][col]
-        }
-    }
+    override fun extractColorMatrix(img: BufferedImage): Array<Array<Int>> = img.toMatrix()
 
     override fun doColorFilter(color: Int): Int = color
 
@@ -86,6 +80,56 @@ class AverageCharMatcher(override val charset: List<MatchData<Double>>) :
 
         return workingChars.floorEntry(lumPercent).value
     }
+}
+
+class ColoredAsciiImageConverter<T>(
+    private val colorExtractor: (SubMatrix<Int>) -> Color,
+    private val asciiImgConverter: AsciiImgConverter<T>,
+) : AsciiImgConverter<Pair<T, Color>> {
+
+    override fun convert(img: BufferedImage, config: AsciiImgConverterConfiguration): Array<Array<Pair<T, Color>>> {
+        assert(
+            img.height > config.h
+        ) {
+            "Image resolution lower then ascii dimensions"
+        }
+
+        val imageMatrix = img.toMatrix()
+        val segmentHeight = imageMatrix.size / config.h
+        val segmentWidth = imageMatrix[0].size / config.w
+
+        val colorMatrix = Array(config.h) { y ->
+            Array(config.w) { x ->
+                val remainingHeight = imageMatrix.size - y * segmentHeight
+                val remainingWidth = imageMatrix[0].size - x * segmentWidth
+
+                colorExtractor(
+                    SubMatrix(
+                        imageMatrix,
+                        x * segmentWidth,
+                        y * segmentHeight,
+                        min(segmentWidth, remainingWidth),
+                        min(segmentHeight, remainingHeight),
+                    )
+                )
+            }
+        }
+
+        val charMatrix = asciiImgConverter.convert(img, config)
+
+        return Array(config.h) { y ->
+            Array(config.w) { x ->
+                charMatrix[y][x] to colorMatrix[y][x]
+            }
+        }
+    }
+}
+
+class GifAsciiImageConverter<T>(
+    private val asciiImgConverter: AsciiImgConverter<T>,
+) : GifImageConverter<T> {
+    override fun convert(images: List<BufferedImage>, config: AsciiImgConverterConfiguration): List<Array<Array<T>>> =
+        images.map { asciiImgConverter.convert(it, config) }
 }
 
 data class AverageMatchData(override val char: Char, override val predicate: Double) : MatchData<Double>
