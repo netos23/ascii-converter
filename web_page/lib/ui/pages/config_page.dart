@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:web_page/ui/routes.dart';
 import 'package:web_page/ui/widgets/dash_button.dart';
 import 'package:web_page/ui/widgets/matrix_background.dart';
 import 'package:web_page/ui/theme/color_theme.dart' as color_theme;
@@ -26,9 +27,15 @@ class ConfigPage extends StatelessWidget {
               return orientation == Orientation.landscape
                   ? Padding(
                       padding: const EdgeInsets.all(50.0),
-                      child: _buildBody(mainAxisSize: MainAxisSize.min),
+                      child: _buildBody(
+                        mainAxisSize: MainAxisSize.min,
+                        context: context,
+                      ),
                     )
-                  : _buildBody(mainAxisSize: MainAxisSize.max);
+                  : _buildBody(
+                      mainAxisSize: MainAxisSize.max,
+                      context: context,
+                    );
             },
           ),
         ),
@@ -38,17 +45,20 @@ class ConfigPage extends StatelessWidget {
 
   Container _buildBody({
     required MainAxisSize mainAxisSize,
+    required BuildContext context,
   }) {
     return Container(
       color: color_theme.darkCard,
       child: _buildAboutArticle(
         mainAxisSize: mainAxisSize,
+        context: context,
       ),
     );
   }
 
   Widget _buildAboutArticle({
     required MainAxisSize mainAxisSize,
+    required BuildContext context,
   }) {
     return Padding(
       padding: const EdgeInsets.all(10.0),
@@ -141,7 +151,7 @@ class ConfigPage extends StatelessWidget {
           ),
           Flexible(
             child: DashButton(
-              onPressed: () {},
+              onPressed: () => Navigator.pushNamed(context, resultPageRoute),
               background: color_theme.primary,
               child: const Text(
                 'Convert',

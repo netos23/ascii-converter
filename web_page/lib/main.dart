@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:web_page/ui/pages/config_page.dart';
 import 'package:web_page/ui/pages/main_page.dart';
+import 'package:web_page/ui/pages/result_page.dart';
 import 'package:web_page/ui/routes.dart';
 
 void main() {
@@ -20,7 +21,8 @@ class MyApp extends StatelessWidget {
       ),
       home: const MainPage(),
       routes: {
-        configPageRoute : (_) => const ConfigPage()
+        configPageRoute : (_) => const ConfigPage(),
+        resultPageRoute : (_) => const ResultPage(),
       },
     );
   }
