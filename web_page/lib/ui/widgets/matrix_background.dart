@@ -1,7 +1,5 @@
 import 'dart:math';
-
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 const asciiChars = [
   65,
@@ -249,8 +247,8 @@ class _MatrixRainPainter extends CustomPainter {
       );
 
       text.layout(
-        maxWidth: size.width,
         minWidth: size.width,
+        maxWidth: size.width,
       );
       text.paint(
         canvas,
