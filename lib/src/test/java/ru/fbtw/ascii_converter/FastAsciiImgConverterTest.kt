@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test
 import ru.fbtw.ascii_converter.core.AsciiImgConverterConfiguration
 import ru.fbtw.ascii_converter.core.MatchData
 import ru.fbtw.ascii_converter.io.printAsciiImg
+import ru.fbtw.ascii_converter.io.writeAsciiImgAsImage
 import ru.fbtw.ascii_converter.io.writeGifAsciiImage
 import java.awt.Color
 import java.awt.Font
@@ -18,7 +19,7 @@ import ru.fbtw.ascii_converter.core.extractByFrequency as extractors
 
 internal class FastAsciiImgConverterTest {
 
-    private val testFile = File("""assets/racon.jpeg""")
+    private val testFile = File("""assets/tom.jpg""")
     private val gifFile = "assets/racon_an.gif"
 
     // ' ', '.', ',', ':', ';', '_', '-', '+', '*', 'a', '&', '#', '$', '@'
@@ -131,9 +132,17 @@ internal class FastAsciiImgConverterTest {
 
     @Test
     fun convertReversed() {
-        val converter = FastAsciiImgConverter(matcher = AverageCharMatcher(matchDataReversed))
+        val converter = FastAsciiImgConverter(matcher = AverageCharMatcher(matchData))
 
-        val charImg = converter.convert(ImageIO.read(testFile), AsciiImgConverterConfiguration(80, 35))
-        printAsciiImg(charImg)
+        val charImg = converter.convert(ImageIO.read(testFile), AsciiImgConverterConfiguration(80, 45))
+        val img = writeAsciiImgAsImage(
+
+            asciiImg = charImg.map {
+                it.map { it to ru.fbtw.ascii_converter.utill.Color(Color.WHITE.rgb) }.toTypedArray()
+            }.toTypedArray(),
+            font = Font("Courier", Font.PLAIN, 12)
+        )
+        ImageIO.write(img,"png",FileOutputStream("./assets/tom_conv.png"))
+//        printAsciiImg(charImg)
     }
 }

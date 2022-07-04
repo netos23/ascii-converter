@@ -3,13 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:web_page/ui/theme/color_theme.dart' as color_theme;
 import 'package:web_page/ui/theme/text_theme.dart' as text_theme;
 
-class DashedTextButton extends StatelessWidget {
+class DotedTextButton extends StatelessWidget {
   final String text;
   final VoidCallback onPressed;
   final Color background;
   final TextStyle? style;
 
-  const DashedTextButton({
+  const DotedTextButton({
     Key? key,
     required this.text,
     required this.onPressed,

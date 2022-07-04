@@ -1,24 +1,27 @@
 import 'package:flutter/material.dart';
-import 'package:web_page/ui/pages/main_page.dart';
-import 'package:web_page/ui/pages/result_page.dart';
+import 'package:web_page/app_dependency/app_dependency.dart';
+import 'package:web_page/app_dependency/app_wrapper.dart';
+import 'package:web_page/ui/app.dart';
+import 'package:web_page/ui/pages/app_routes.dart';
+import 'package:web_page/ui/pages/examples_page/examples_page.dart';
+import 'package:web_page/ui/pages/main_page/main_page.dart';
+import 'package:web_page/ui/pages/result_page/result_page.dart';
+
 import 'package:web_page/ui/widgets/matrix_background.dart';
 
-void main() {
-  runApp(const MyApp());
-}
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
 
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  final dependency = AppDependency(
+    examplesConfigPath: 'examples/examples.json',
+  );
 
-  // This widget is the root of your application.
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: const MainPage(),
-    );
-  }
+  await dependency.init();
+
+  runApp(
+    AppWrapper(
+      dependency: dependency,
+      app: const App(),
+    ),
+  );
 }

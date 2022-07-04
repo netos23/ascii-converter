@@ -1,0 +1,8 @@
+{
+  "examples": [
+    {
+      "before" : "assets/examples/tom.jpg",
+      "after" : "assets/examples/tom_conv.png"
+    }
+  ]
+}

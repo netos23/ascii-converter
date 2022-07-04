@@ -1,64 +1,37 @@
 import 'package:flutter/material.dart';
-import 'package:web_page/ui/widgets/primary_color_button.dart';
+import 'package:web_page/ui/pages/app_routes.dart';
+import 'package:web_page/ui/widgets/matrix_page_with_card.dart';
+import 'package:web_page/ui/widgets/doted_text_button.dart';
 import 'package:web_page/ui/theme/color_theme.dart' as color_theme;
 import 'package:web_page/ui/theme/text_theme.dart' as text_theme;
-import 'package:web_page/ui/widgets/matrix_page.dart';
 
 class MainPage extends StatelessWidget {
   const MainPage({Key? key}) : super(key: key);
 
+
+
   @override
   Widget build(BuildContext context) {
-    return MatrixPage(
-      landscapeLayout: _buildLandscape(),
-      portraitLayout: _buildPortrait(),
-    );
-  }
-
-  Widget _buildPortrait() {
-    return _buildBody(mainAxisSize: MainAxisSize.max);
-  }
-
-  Padding _buildLandscape() {
-    return Padding(
-      padding: const EdgeInsets.all(50.0),
-      child: _buildBody(
-        mainAxisSize: MainAxisSize.min,
-      ),
-    );
-  }
-
-  Widget _buildBody({
-    required MainAxisSize mainAxisSize,
-  }) {
-    return Container(
-      color: color_theme.darkCard,
-      child: Padding(
-        padding: const EdgeInsets.all(10.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          mainAxisSize: mainAxisSize,
-          children: [
-            Flexible(
-              flex: 3,
-              child: _buildTitle(),
-            ),
-            Flexible(
-              flex: 5,
-              child: _buildAboutArticle(),
-            ),
-            const Spacer(),
-            Flexible(
-              flex: 2,
-              child: _buildHintArticle(),
-            ),
-            Flexible(
-              flex: 2,
-              child: _buildNavigationRow(),
-            ),
-          ],
+    return MatrixPageWithCard(
+      children: [
+        Flexible(
+          flex: 3,
+          child: _buildTitle(),
         ),
-      ),
+        Flexible(
+          flex: 5,
+          child: _buildAboutArticle(),
+        ),
+        const Spacer(),
+        Flexible(
+          flex: 2,
+          child: _buildHintArticle(),
+        ),
+        Flexible(
+          flex: 3,
+          child: _buildNavigationRow(context),
+        ),
+      ],
     );
   }
 
@@ -91,7 +64,7 @@ class MainPage extends StatelessWidget {
     );
   }
 
-  Widget _buildNavigationRow() {
+  Widget _buildNavigationRow(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(20.0),
       child: Row(
@@ -99,15 +72,21 @@ class MainPage extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Flexible(
-            child: DashedTextButton(
-              onPressed: () {},
+            child: DotedTextButton(
+              onPressed: () => Navigator.pushNamed(
+                context,
+                AppRoutes.examplesPage,
+              ),
               text: 'Examples',
             ),
           ),
           const Spacer(),
           Flexible(
-            child: DashedTextButton(
-              onPressed: () {},
+            child: DotedTextButton(
+              onPressed: () => Navigator.pushNamed(
+                context,
+                AppRoutes.configPage,
+              ),
               text: 'Convert',
             ),
           ),
