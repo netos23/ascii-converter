@@ -36,7 +36,7 @@ http {
                 server_name _;
                 keepalive_timeout 5;
 
-                root <%= ENV['FLUTTER_DEPLOY_DIR'] || /app/public_html/ %>;
+                root <%= ENV['FLUTTER_DEPLOY_DIR'] || /app/public_html %>;
                 index index.html;
 
                 location / {
