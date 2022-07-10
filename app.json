@@ -12,6 +12,6 @@
     }
   ],
   "env": {
-    "FLUTTER_SOURCE_DIR": "web_page"
+    "FLUTTER_SOURCE_DIR": "./web_page"
   }
 }
