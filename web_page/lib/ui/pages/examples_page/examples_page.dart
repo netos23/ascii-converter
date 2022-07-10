@@ -16,8 +16,9 @@ class ExamplesPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final service = context.read<ConverterExampleService>();
+
     return BlocProvider(
-      create: (_) => ExamplesPageWidgetModel.fromService(service),
+      create: (_) => ExamplesPageWidgetModel(service)..init(),
       child: const ExamplesPageWidget(),
     );
   }

@@ -59,32 +59,20 @@ class ExamplesList extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<ExamplesPageWidgetModel, ExamplesPageModel>(
       bloc: context.watch<ExamplesPageWidgetModel>(),
-      builder: (context, futureItems) {
-        return FutureBuilder<List<ConverterExample>>(
-          future: futureItems.examples,
-          builder: (context, snapshot) {
-            if (snapshot.hasError) {
-              // todo: error handle
-              return const CircularProgressIndicator();
-            }
+      builder: (context, state) {
+        final items = state.examples;
 
-            if (!snapshot.hasData) {
-              return const CircularProgressIndicator();
-            }
-            final examples = snapshot.data;
+        if (items == null) {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        }
 
-            if (examples == null) {
-              // todo: empty list
-              return const CircularProgressIndicator();
-            }
-
-            return ListView.builder(
-              clipBehavior: Clip.antiAlias,
-              itemCount: examples.length,
-              itemBuilder: (context, index) {
-                return Example(example: examples[index]);
-              },
-            );
+        return ListView.builder(
+          clipBehavior: Clip.antiAlias,
+          itemCount: items.length,
+          itemBuilder: (context, index) {
+            return Example(example: items[index]);
           },
         );
       },
@@ -107,32 +95,33 @@ class Example extends StatelessWidget {
         padding: const EdgeInsets.all(8.0),
         child: SizedBox(
           height: 500,
-          child: OrientationBuilder(builder: (context, orientation) {
-            print('reb $orientation');
-            return Flex(
-              mainAxisSize: MainAxisSize.min,
-              direction: orientation == Orientation.landscape
-                  ? Axis.horizontal
-                  : Axis.vertical,
-              children: [
-                Expanded(
-                  flex: 10,
-                  child: NamedImage(
-                    name: 'before',
-                    asset: example.before,
+          child: OrientationBuilder(
+            builder: (context, orientation) {
+              return Flex(
+                mainAxisSize: MainAxisSize.min,
+                direction: orientation == Orientation.landscape
+                    ? Axis.horizontal
+                    : Axis.vertical,
+                children: [
+                  Expanded(
+                    flex: 10,
+                    child: NamedImage(
+                      name: 'before',
+                      asset: example.before,
+                    ),
                   ),
-                ),
-                const Spacer(),
-                Expanded(
-                  flex: 10,
-                  child: NamedImage(
-                    name: 'after',
-                    asset: example.after,
+                  const Spacer(),
+                  Expanded(
+                    flex: 10,
+                    child: NamedImage(
+                      name: 'after',
+                      asset: example.after,
+                    ),
                   ),
-                ),
-              ],
-            );
-          }),
+                ],
+              );
+            },
+          ),
         ),
       ),
     );

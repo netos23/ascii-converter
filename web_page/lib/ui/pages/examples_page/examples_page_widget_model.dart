@@ -4,11 +4,12 @@ import 'package:web_page/domain/service/converter_example_service.dart';
 import 'package:web_page/ui/pages/examples_page/examples_page_model.dart';
 
 class ExamplesPageWidgetModel extends Cubit<ExamplesPageModel> {
-  factory ExamplesPageWidgetModel.fromService(ConverterExampleService service) {
-    return ExamplesPageWidgetModel._(
-      ExamplesPageModel(service.examples),
-    );
-  }
+  final ConverterExampleService service;
 
-  ExamplesPageWidgetModel._(super.initialState);
+  ExamplesPageWidgetModel(this.service) : super(ExamplesPageModel(null));
+
+  Future<void> init() async{
+    final examples = await service.examples;
+    emit(ExamplesPageModel(examples));
+  }
 }
