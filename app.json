@@ -1,0 +1,17 @@
+{
+  "environments": {
+    "test": {
+      "scripts": {
+        "test": "cd web_page && flutter analyze && flutter test"
+      }
+    }
+  },
+  "buildpacks": [
+    {
+      "url": "ee/heroku-buildpack-flutter-light"
+    }
+  ],
+  "env": {
+    "FLUTTER_SOURCE_DIR": "web_page"
+  }
+}
