@@ -6,8 +6,6 @@ import 'package:web_page/ui/theme/text_theme.dart' as text_theme;
 class MatrixPageWithCard extends StatelessWidget {
   final List<Widget> children;
 
-
-
   const MatrixPageWithCard({
     Key? key,
     required this.children,

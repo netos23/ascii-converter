@@ -29,6 +29,8 @@ class MatrixPage extends StatelessWidget {
     return Scaffold(
       body: MatrixBackground(
         style: MatrixRainStyle.only(
+          duration: Duration(milliseconds: 5),
+          levels: 30,
           textColor: color_theme.primary,
           backgroundColor: color_theme.background,
           textStyle: GoogleFonts.cutiveMono(

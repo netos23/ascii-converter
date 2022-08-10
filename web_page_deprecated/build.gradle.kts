@@ -1,5 +1,6 @@
 plugins {
     kotlin("js") version "1.4.10"
+    id("kotlin2js") version "1.7.20-Beta"
 }
 
 group = "ru.fbtw.ascii_converter"
@@ -20,6 +21,7 @@ dependencies {
     implementation("org.jetbrains:kotlin-react-redux:5.0.7-pre.113-kotlin-1.4.0")*/
     implementation("org.jetbrains:kotlin-styled:1.0.0-pre.113-kotlin-1.4.0")
     implementation("org.jetbrains:kotlin-react-router-dom:5.1.2-pre.113-kotlin-1.4.0")
+    implementation(kotlin("stdlib-js"))
 }
 
 kotlin {

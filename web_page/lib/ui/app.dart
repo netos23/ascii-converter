@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:web_page/ui/pages/app_routes.dart';
-import 'package:web_page/ui/pages/examples_page/examples_page.dart';
-import 'package:web_page/ui/pages/main_page/main_page.dart';
+import 'package:web_page/ui/ui.dart';
 
 class App extends StatelessWidget {
   const App({Key? key}) : super(key: key);

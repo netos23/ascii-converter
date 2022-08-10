@@ -19,7 +19,7 @@ import ru.fbtw.ascii_converter.core.extractByFrequency as extractors
 
 internal class FastAsciiImgConverterTest {
 
-    private val testFile = File("""assets/tom.jpg""")
+    private val testFile = File("""assets/sticj.png""")
     private val gifFile = "assets/racon_an.gif"
 
     // ' ', '.', ',', ':', ';', '_', '-', '+', '*', 'a', '&', '#', '$', '@'
@@ -140,7 +140,8 @@ internal class FastAsciiImgConverterTest {
             asciiImg = charImg.map {
                 it.map { it to ru.fbtw.ascii_converter.utill.Color(Color.WHITE.rgb) }.toTypedArray()
             }.toTypedArray(),
-            font = Font("Courier", Font.PLAIN, 12)
+            font = Font("Courier", Font.PLAIN, 12),
+            background = ru.fbtw.ascii_converter.utill.Color(255,255,255)
         )
         ImageIO.write(img,"png",FileOutputStream("./assets/tom_conv.png"))
 //        printAsciiImg(charImg)
